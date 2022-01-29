@@ -7,8 +7,8 @@ public class FramePanel extends JPanel implements Runnable{
     final int scale = 2;
 
     final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 36;
-    final int maxScreenRow = 24;
+    final int maxScreenCol = 18;
+    final int maxScreenRow = 14;
     final int screenWidth = tileSize * maxScreenCol; // 760px
     final int screenHeight = tileSize * maxScreenRow; // 576px
 
@@ -17,10 +17,36 @@ public class FramePanel extends JPanel implements Runnable{
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
-    //set players defualt position
+    //set players default position
     int playerX = 100;
     int playerY = 100;
     int playerSpeed = 4;
+
+    // Ball Movement Speed
+    private int redBallDx = 6;        // increment amount (x axis)
+    private int redBallDy = 6;        // increment amount (y axis)
+    private int greenBallDx = 3;        // increment amount (x axis)
+    private int greenBallDy = 3;        // increment amount (y axis)
+    private int blueBallDx = 8;        // increment amount (x axis)
+    private int blueBallDy = 200;        // increment amount (y axis)
+
+    // Set ball default position
+
+    // Red Ball
+    private int redBallX = 500;        // x position
+    private int redBallY = 0;        // y position
+    private int radius = 15;    // ball radius
+
+    // Green Ball
+    private int greenBallX = 0;        // x position
+    private int greenBallY = 250;        // y position
+    private int greenBallRadius = 30;    // ball radius
+
+    // Blue Ball
+    private int blueBallX = 250;        // x position
+    private int blueBallY = 250;        // y position
+    private int blueBallRadius = 7;    // ball radius
+
 
     public FramePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -30,34 +56,13 @@ public class FramePanel extends JPanel implements Runnable{
         this.setFocusable(true);
     }
 
-    public  void startGameThread(){
+    public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     @Override
     public void run() {
-//
-//        while (gameThread != null) {
-//
-//            double drawInterval = 1000000000/FPS; //0.0166666 seconds
-//            double nextDrawTime = System.nanoTime() + drawInterval;
-//
-//            update();
-//            repaint();
-//
-//            try {
-//                double remainingTime = nextDrawTime - System.nanoTime();
-//                remainingTime = remainingTime/1000000;
-//                if(remainingTime < 0){
-//                    remainingTime = 0;
-//                }
-//                Thread.sleep((long) remainingTime);
-//                nextDrawTime += drawInterval;
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
 
         // delta/accumulator loop (a different type of loop)
         double drawInterval = 1000000000/FPS;
@@ -105,18 +110,76 @@ public class FramePanel extends JPanel implements Runnable{
             else if(keyH.rightPressed == true){
                 playerX += playerSpeed;
             }
+
         }
 
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            Graphics2D g2 = (Graphics2D)g;
+            // Player
+            Graphics2D player = (Graphics2D)g;
 
-            g2.setColor(Color.white);
+            player.setColor(Color.white);
 
-            g2.fillRect(playerX,playerY, tileSize, tileSize);
+            player.fillRect(playerX,playerY, tileSize, tileSize);
 
-            g2.dispose();
+            //
+
+            // Red Ball
+            Graphics2D redBall = (Graphics2D)g;
+            redBall.setColor(Color.red);
+
+            // Adjust ball position
+            redBallX += redBallDx;
+            redBallY += redBallDy;
+            redBall.fillOval(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
+
+
+            // Boundary logic
+            if (redBallX < radius) redBallDx = Math.abs(redBallDx);
+            if (redBallX > getWidth() - radius) redBallDx = -Math.abs(redBallDx);
+            if (redBallY < radius) redBallDy = Math.abs(redBallDy);
+            if (redBallY > getHeight() - radius) redBallDy = -Math.abs(redBallDy);
+
+            //
+
+            // Green Ball
+            Graphics2D greenBall = (Graphics2D)g;
+            greenBall.setColor(Color.green);
+
+            // Adjust ball position
+            greenBallX += greenBallDx;
+            greenBallY += greenBallDy;
+            greenBall.fillOval(greenBallX - greenBallRadius, greenBallY - greenBallRadius, greenBallRadius * 2, greenBallRadius * 2);
+
+
+            // Boundary logic
+            if (greenBallX < greenBallRadius) greenBallDx = Math.abs(greenBallDx);
+            if (greenBallX > getWidth() - greenBallRadius) greenBallDx = -Math.abs(greenBallDx);
+            if (greenBallY < greenBallRadius) greenBallDy = Math.abs(greenBallDy);
+            if (greenBallY > getHeight() - greenBallRadius) greenBallDy = -Math.abs(greenBallDy);
+
+            // Blue Ball
+            Graphics2D blueBall = (Graphics2D)g;
+            greenBall.setColor(Color.blue);
+
+            // Adjust ball position
+            blueBallX += blueBallDx;
+            blueBallY = blueBallDy;
+            greenBall.fillOval(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
+
+
+            // Boundary logic
+            if (blueBallX < blueBallRadius) blueBallDx = Math.abs(blueBallDx);
+            if (blueBallX > getWidth() - blueBallRadius) blueBallDx = -Math.abs(blueBallDx);
+            if (blueBallY < blueBallRadius) blueBallDy = Math.abs(blueBallDy);
+            if (blueBallY > getHeight() - blueBallRadius) blueBallDy = -Math.abs(blueBallDy);
+
+
+            player.dispose();
+            redBall.dispose();
+            greenBall.dispose();
+            blueBall.dispose();
 
 
         }
