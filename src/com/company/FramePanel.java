@@ -97,17 +97,18 @@ public class FramePanel extends JPanel implements Runnable{
 
 
     }
+    // Key Down action + Player Boundary restriction
         public void update() {
-            if(keyH.upPressed == true){
+            if(keyH.upPressed == true && playerY > 0){
                 playerY -= playerSpeed;
             }
-            else if(keyH.downPressed == true){
+            else if(keyH.downPressed == true && playerY < screenHeight - 2 * originalTileSize){
                 playerY += playerSpeed;
             }
-            else if(keyH.leftPressed == true){
+            else if(keyH.leftPressed == true && playerX > 0){
                 playerX -= playerSpeed;
             }
-            else if(keyH.rightPressed == true){
+            else if(keyH.rightPressed == true && playerX < screenWidth - 2 * originalTileSize){
                 playerX += playerSpeed;
             }
 
@@ -140,6 +141,7 @@ public class FramePanel extends JPanel implements Runnable{
             if (redBallX > getWidth() - radius) redBallDx = -Math.abs(redBallDx);
             if (redBallY < radius) redBallDy = Math.abs(redBallDy);
             if (redBallY > getHeight() - radius) redBallDy = -Math.abs(redBallDy);
+            if(redBallX + greenBallRadius == playerX + originalTileSize || redBallY + greenBallRadius == playerY + originalTileSize) System.out.println("red kills u");
 
             //
 
@@ -158,6 +160,7 @@ public class FramePanel extends JPanel implements Runnable{
             if (greenBallX > getWidth() - greenBallRadius) greenBallDx = -Math.abs(greenBallDx);
             if (greenBallY < greenBallRadius) greenBallDy = Math.abs(greenBallDy);
             if (greenBallY > getHeight() - greenBallRadius) greenBallDy = -Math.abs(greenBallDy);
+            if(greenBallX + greenBallRadius == playerX + originalTileSize || greenBallY + greenBallRadius == playerY + originalTileSize) System.out.println("green has koed ya");
 
             // Blue Ball
             Graphics2D blueBall = (Graphics2D)g;
@@ -174,6 +177,8 @@ public class FramePanel extends JPanel implements Runnable{
             if (blueBallX > getWidth() - blueBallRadius) blueBallDx = -Math.abs(blueBallDx);
             if (blueBallY < blueBallRadius) blueBallDy = Math.abs(blueBallDy);
             if (blueBallY > getHeight() - blueBallRadius) blueBallDy = -Math.abs(blueBallDy);
+            if(blueBallX + greenBallRadius == playerX + originalTileSize) System.out.println("blue ball has hit");
+
 
 
             player.dispose();
