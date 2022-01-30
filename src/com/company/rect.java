@@ -8,9 +8,6 @@ public class rect {
     int tileSize;
 
 
-    public Rectangle bounds(){
-            return new Rectangle(playerX, playerY, tileSize, tileSize);
-    }
 }
 
 
