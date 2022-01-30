@@ -1,6 +1,7 @@
 package com.company;
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public class FramePanel extends JPanel implements Runnable{
     final int originalTileSize = 16; //16x16 tile
@@ -28,7 +29,7 @@ public class FramePanel extends JPanel implements Runnable{
     private int greenBallDx = 3;        // increment amount (x axis)
     private int greenBallDy = 3;        // increment amount (y axis)
     private int blueBallDx = 8;        // increment amount (x axis)
-    private int blueBallDy = 200;        // increment amount (y axis)
+    private int blueBallDy = 8;        // increment amount (y axis)
 
     // Set ball default position
 
@@ -44,7 +45,7 @@ public class FramePanel extends JPanel implements Runnable{
 
     // Blue Ball
     private int blueBallX = 250;        // x position
-    private int blueBallY = 250;        // y position
+    private int blueBallY = 200;        // y position
     private int blueBallRadius = 7;    // ball radius
 
 
@@ -123,53 +124,54 @@ public class FramePanel extends JPanel implements Runnable{
             player.setColor(Color.white);
 
             player.fillRect(playerX,playerY, tileSize, tileSize);
+//            player.fill(new Rectangle2D.Float(playerX,playerY, tileSize, tileSize));
+
 
             //
 
-            // Red Ball
-            Graphics2D redBall = (Graphics2D)g;
-            redBall.setColor(Color.red);
-
-            // Adjust ball position
-            redBallX += redBallDx;
-            redBallY += redBallDy;
-            redBall.fillOval(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
-
-
-            // Boundary logic
-            if (redBallX < radius) redBallDx = Math.abs(redBallDx);
-            if (redBallX > getWidth() - radius) redBallDx = -Math.abs(redBallDx);
-            if (redBallY < radius) redBallDy = Math.abs(redBallDy);
-            if (redBallY > getHeight() - radius) redBallDy = -Math.abs(redBallDy);
-            if(redBallX + greenBallRadius == playerX + originalTileSize || redBallY + greenBallRadius == playerY + originalTileSize) System.out.println("red kills u");
-
-            //
-
-            // Green Ball
-            Graphics2D greenBall = (Graphics2D)g;
-            greenBall.setColor(Color.green);
-
-            // Adjust ball position
-            greenBallX += greenBallDx;
-            greenBallY += greenBallDy;
-            greenBall.fillOval(greenBallX - greenBallRadius, greenBallY - greenBallRadius, greenBallRadius * 2, greenBallRadius * 2);
-
-
-            // Boundary logic
-            if (greenBallX < greenBallRadius) greenBallDx = Math.abs(greenBallDx);
-            if (greenBallX > getWidth() - greenBallRadius) greenBallDx = -Math.abs(greenBallDx);
-            if (greenBallY < greenBallRadius) greenBallDy = Math.abs(greenBallDy);
-            if (greenBallY > getHeight() - greenBallRadius) greenBallDy = -Math.abs(greenBallDy);
-            if(greenBallX + greenBallRadius == playerX + originalTileSize || greenBallY + greenBallRadius == playerY + originalTileSize) System.out.println("green has koed ya");
+//            // Red Ball
+//            Graphics2D redBall = (Graphics2D)g;
+//            redBall.setColor(Color.red);
+//
+//            // Adjust ball position
+//            redBallX += redBallDx;
+//            redBallY += redBallDy;
+//            redBall.fillOval(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
+//
+//
+//            // Boundary logic
+//            if (redBallX < radius) redBallDx = Math.abs(redBallDx);
+//            if (redBallX > getWidth() - radius) redBallDx = -Math.abs(redBallDx);
+//            if (redBallY < radius) redBallDy = Math.abs(redBallDy);
+//            if (redBallY > getHeight() - radius) redBallDy = -Math.abs(redBallDy);
+//            if(redBallX + radius == playerX + originalTileSize && redBallY + radius == playerY + originalTileSize) System.out.println("red kills u");
+//
+//            //
+//
+//            // Green Ball
+//            Graphics2D greenBall = (Graphics2D)g;
+//            greenBall.setColor(Color.green);
+//
+//            // Adjust ball position
+//            greenBallX += greenBallDx;
+//            greenBallY += greenBallDy;
+//            greenBall.fillOval(greenBallX - greenBallRadius, greenBallY - greenBallRadius, greenBallRadius * 2, greenBallRadius * 2);
+//
+//
+//            // Boundary logic
+//            if (greenBallX < greenBallRadius) greenBallDx = Math.abs(greenBallDx);
+//            if (greenBallX > getWidth() - greenBallRadius) greenBallDx = -Math.abs(greenBallDx);
+//            if (greenBallY < greenBallRadius) greenBallDy = Math.abs(greenBallDy);
+//            if (greenBallY > getHeight() - greenBallRadius) greenBallDy = -Math.abs(greenBallDy);
+//            if(greenBallX + greenBallRadius == playerX + originalTileSize && greenBallY + greenBallRadius == playerY + originalTileSize) System.out.println("green has koed ya");
 
             // Blue Ball
             Graphics2D blueBall = (Graphics2D)g;
-            greenBall.setColor(Color.blue);
+            blueBall.setColor(Color.blue);
 
             // Adjust ball position
             blueBallX += blueBallDx;
-            blueBallY = blueBallDy;
-            greenBall.fillOval(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
+            blueBall.fillOval(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
 
 
             // Boundary logic
@@ -177,17 +179,22 @@ public class FramePanel extends JPanel implements Runnable{
             if (blueBallX > getWidth() - blueBallRadius) blueBallDx = -Math.abs(blueBallDx);
             if (blueBallY < blueBallRadius) blueBallDy = Math.abs(blueBallDy);
             if (blueBallY > getHeight() - blueBallRadius) blueBallDy = -Math.abs(blueBallDy);
-            if(blueBallX + greenBallRadius == playerX + originalTileSize) System.out.println("blue ball has hit");
+            if(blueBallX + blueBallRadius == playerX + originalTileSize && playerY == blueBallY) System.out.println("blue ball has hit");
 
-
+//             if (isCollision){
+//              player.drawString("Collision", 350, 50); }
 
             player.dispose();
-            redBall.dispose();
-            greenBall.dispose();
+//            redBall.dispose();
+//            greenBall.dispose();
             blueBall.dispose();
 
 
         }
+
+    public void collision(){
+        Rectangle rectangle1 = player.bounds();
+    }
 
 
 
