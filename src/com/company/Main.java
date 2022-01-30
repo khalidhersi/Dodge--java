@@ -1,40 +1,18 @@
 package com.company;
 
+import com.company.rect;
+
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 public class Main {
-
     public static void main(String[] args) {
-	// write your code here
-        JFrame window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.setTitle("Paper Plane");
-
-        FramePanel framePanel = new FramePanel();
-        window.add(framePanel);
-
-        window.pack();
-
-
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
-
-        framePanel.startGameThread();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        JFrame frame = new JFrame("Collision Detection");
+        frame.setVisible(true);
+        frame.setSize(800, 250);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new Paint());
     }
 }
+
