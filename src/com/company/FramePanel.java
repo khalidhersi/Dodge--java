@@ -192,9 +192,9 @@ public class FramePanel extends JPanel implements Runnable{
 
         }
 
-    public void collision(){
-        Rectangle rectangle1 = player.bounds();
-    }
+//    public void collision(){
+//        Rectangle rectangle1 = player.bounds();
+//    }
 
 
 
