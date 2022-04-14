@@ -15,7 +15,9 @@ public class FramePanel extends JPanel implements Runnable{
 
     // play boolean
     private boolean play;
+    private int playCounter = 0;
     private int textLocation;
+    private boolean collision = false;
 
     int FPS = 60;
 
@@ -23,8 +25,8 @@ public class FramePanel extends JPanel implements Runnable{
     Thread gameThread;
 
     //set players default position
-    int playerX = 100;
-    int playerY = 100;
+    int playerX = screenWidth/2 - tileSize;
+    int playerY = screenHeight/2 + (3 * tileSize)  ;
     int playerSpeed = 4;
 
     // Ball Movement Speed
@@ -103,21 +105,21 @@ public class FramePanel extends JPanel implements Runnable{
     }
     // Key Down action + Player Boundary restriction
         public void update() {
+            if(keyH.spacePressed == true){
+                play = true;
+                playCounter ++;
+            }
             if(keyH.upPressed == true && playerY > 0){
                 playerY -= playerSpeed;
-                play = true;
             }
             else if(keyH.downPressed == true && playerY < screenHeight - 2 * originalTileSize){
                 playerY += playerSpeed;
-                play = true;
             }
             else if(keyH.leftPressed == true && playerX > 0){
                 playerX -= playerSpeed;
-                play = true;
             }
             else if(keyH.rightPressed == true && playerX < screenWidth - 2 * originalTileSize){
                 playerX += playerSpeed;
-                play = true;
             }
 
         }
@@ -131,12 +133,14 @@ public class FramePanel extends JPanel implements Runnable{
             player.setColor(Color.white);
 
             player.fillRect(playerX,playerY, tileSize, tileSize);
-//            player.fill(new Rectangle2D.Float(playerX,playerY, tileSize, tileSize));
 
+            // start text
+            if(play == false && collision == false) {
                 g.setColor(Color.green);
-                g.setFont(new Font("serif",Font.BOLD, 30));
-            g.drawString("Press (W, A, S or D) to Start", textLocation, textLocation* 2);
-
+                g.setFont(new Font("serif", Font.BOLD, 30));
+                g.drawString("Press (SPACE) to Start", textLocation * 3 / 2, textLocation * 5 / 2);
+            }
+            // text position
                 textLocation = screenHeight / 5;
                 if(play) {
                     textLocation = 10000;
@@ -144,11 +148,8 @@ public class FramePanel extends JPanel implements Runnable{
                     textLocation = screenHeight / 5;
                 }
 
-            //
-
             if(play) {
-
-//            // Red Ball
+               // Red Ball
                 Graphics2D redBall = (Graphics2D) g;
                 redBall.setColor(Color.red);
 
@@ -198,24 +199,50 @@ public class FramePanel extends JPanel implements Runnable{
                 greenBall.dispose();
                 blueBall.dispose();
             }
+
+            // Square Hit Boxes
             Rectangle greenBallRect = new Rectangle(greenBallX - greenBallRadius, greenBallY - greenBallRadius, greenBallRadius * 2, greenBallRadius * 2);
             Rectangle redBallRect = new Rectangle(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
             Rectangle blueBallRect = new Rectangle(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
             Rectangle playerRect = new Rectangle(playerX,playerY, tileSize, tileSize);
 
             // Boundary logic
-            if(playerRect.intersects(redBallRect) || playerRect.intersects(greenBallRect) || playerRect.intersects(blueBallRect))
-            {
-                play = false;
-                System.out.println("collision");
-                g.setColor(Color.RED);
-                g.setFont(new Font("serif",Font.BOLD, 30));
-                g.drawString("Game Over, Scores: ", screenWidth/3,screenHeight/2 );
-
-                g.setColor(Color.RED);
-                g.setFont(new Font("serif",Font.BOLD, 20));
-                g.drawString("Press (Enter) to Restart", screenWidth/3,screenHeight/2+30);
+            if(playerRect.intersects(redBallRect) || playerRect.intersects(greenBallRect) || playerRect.intersects(blueBallRect)) {
+                collision = true;
+            } else {
+                collision = false;
             }
+                if(collision) {
+                    play = false;
+
+                    // Game Over Text
+                    System.out.println("collision");
+                    g.setColor(Color.orange);
+                    g.setFont(new Font("serif", Font.BOLD, 100));
+                    g.drawString("Game Over!", 25, 120);
+
+                    g.setColor(Color.white);
+                    g.setFont(new Font("serif",Font.BOLD, 30));
+                    g.drawString("Press (SPACE) to Restart", textLocation*3/2 - 10, textLocation* 5/2);
+
+                }
+
+                if(playCounter > 0){
+                    // Position Resets
+                    // Player Reset
+                    playerX = screenWidth/2 - tileSize;
+                    playerY = screenHeight/2 + (3 * tileSize);
+                    // Red Ball Reset
+                    redBallX = 500;
+                    redBallY = 0;
+                    // Green Ball Reset
+                    greenBallX = 0;
+                    greenBallY = 250;
+                    // Blue Ball Reset
+                    blueBallX = 250;
+                    blueBallY = 200;
+                    playCounter = 0;
+                }
 
             if (blueBallX < blueBallRadius) blueBallDx = Math.abs(blueBallDx);
             if (blueBallX > getWidth() - blueBallRadius) blueBallDx = -Math.abs(blueBallDx);
