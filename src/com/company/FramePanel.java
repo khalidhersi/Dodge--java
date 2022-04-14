@@ -36,6 +36,8 @@ public class FramePanel extends JPanel implements Runnable{
     private int greenBallDy = 3;        // increment amount (y axis)
     private int blueBallDx = 8;        // increment amount (x axis)
     private int blueBallDy = 8;        // increment amount (y axis)
+    private int yellowBallDx = 8;        // increment amount (x axis)
+    private int yellowBallDy = 8;        // increment amount (y axis)
 
     // Set ball default position
 
@@ -54,6 +56,9 @@ public class FramePanel extends JPanel implements Runnable{
     private int blueBallY = 200;        // y position
     private int blueBallRadius = 7;    // ball radius
 
+    private int yellowBallX = screenWidth / 3/4;        // x position
+    private int yellowBallY = screenHeight - 14;        // y position
+    private int yellowBallRadius = 7;    // ball radius
 
     public FramePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -194,20 +199,43 @@ public class FramePanel extends JPanel implements Runnable{
                 // Adjust ball position
                 blueBallX += blueBallDx;
                 blueBall.fillOval(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
+
+                if (blueBallX < blueBallRadius) blueBallDx = Math.abs(blueBallDx);
+                if (blueBallX > getWidth() - blueBallRadius) blueBallDx = -Math.abs(blueBallDx);
+                if (blueBallY < blueBallRadius) blueBallDy = Math.abs(blueBallDy);
+                if (blueBallY > getHeight() - blueBallRadius) blueBallDy = -Math.abs(blueBallDy);
+                if(blueBallX + blueBallRadius == playerX + originalTileSize && playerY == blueBallY) System.out.println("blue ball has hit");
+
+                // Yellow Ball
+                Graphics2D yellowBall = (Graphics2D) g;
+                yellowBall.setColor(Color.yellow);
+
+                // Adjust ball position
+                yellowBallY -= yellowBallDy;
+                yellowBall.fillOval(yellowBallX - yellowBallRadius, yellowBallY - yellowBallRadius, yellowBallRadius * 2, yellowBallRadius * 2);
+
+                if (yellowBallY < yellowBallRadius) yellowBallDy = Math.abs(yellowBallDy);
+                if (yellowBallY > getWidth() - yellowBallRadius) yellowBallDy = -Math.abs(yellowBallDy);
+                if (yellowBallX < yellowBallRadius) yellowBallDx = Math.abs(yellowBallDx);
+                if (yellowBallX > getHeight() - yellowBallRadius) yellowBallDx = -Math.abs(yellowBallDx);
+                if(yellowBallY + yellowBallRadius == playerX + originalTileSize && playerY == yellowBallX) System.out.println("yellow ball has hit");
+
                 player.dispose();
                 redBall.dispose();
                 greenBall.dispose();
                 blueBall.dispose();
+                yellowBall.dispose();
             }
 
             // Square Hit Boxes
+            Rectangle playerRect = new Rectangle(playerX,playerY, tileSize, tileSize);
             Rectangle greenBallRect = new Rectangle(greenBallX - greenBallRadius, greenBallY - greenBallRadius, greenBallRadius * 2, greenBallRadius * 2);
             Rectangle redBallRect = new Rectangle(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
             Rectangle blueBallRect = new Rectangle(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
-            Rectangle playerRect = new Rectangle(playerX,playerY, tileSize, tileSize);
+            Rectangle yellowBallRect = new Rectangle(yellowBallX - yellowBallRadius, yellowBallY - yellowBallRadius, yellowBallRadius * 2, yellowBallRadius * 2);
 
             // Boundary logic
-            if(playerRect.intersects(redBallRect) || playerRect.intersects(greenBallRect) || playerRect.intersects(blueBallRect)) {
+            if(playerRect.intersects(redBallRect) || playerRect.intersects(greenBallRect) || playerRect.intersects(blueBallRect) || playerRect.intersects(yellowBallRect)) {
                 collision = true;
             } else {
                 collision = false;
@@ -241,14 +269,12 @@ public class FramePanel extends JPanel implements Runnable{
                     // Blue Ball Reset
                     blueBallX = 250;
                     blueBallY = 200;
+                    // Yellow Ball Reset
+                    yellowBallX = screenWidth / 3/4;
+                    yellowBallY = screenHeight - yellowBallRadius - yellowBallRadius;
+                    // play Counter Reset
                     playCounter = 0;
                 }
-
-            if (blueBallX < blueBallRadius) blueBallDx = Math.abs(blueBallDx);
-            if (blueBallX > getWidth() - blueBallRadius) blueBallDx = -Math.abs(blueBallDx);
-            if (blueBallY < blueBallRadius) blueBallDy = Math.abs(blueBallDy);
-            if (blueBallY > getHeight() - blueBallRadius) blueBallDy = -Math.abs(blueBallDy);
-            if(blueBallX + blueBallRadius == playerX + originalTileSize && playerY == blueBallY) System.out.println("blue ball has hit");
 
             player.dispose();
 
