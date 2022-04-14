@@ -13,6 +13,10 @@ public class FramePanel extends JPanel implements Runnable{
     final int screenWidth = tileSize * maxScreenCol; // 760px
     final int screenHeight = tileSize * maxScreenRow; // 576px
 
+    // play boolean
+    private boolean play;
+    private int textLocation;
+
     int FPS = 60;
 
     KeyHandler keyH = new KeyHandler();
@@ -64,7 +68,6 @@ public class FramePanel extends JPanel implements Runnable{
 
     @Override
     public void run() {
-
         // delta/accumulator loop (a different type of loop)
         double drawInterval = 1000000000/FPS;
         double delta = 0;
@@ -102,15 +105,19 @@ public class FramePanel extends JPanel implements Runnable{
         public void update() {
             if(keyH.upPressed == true && playerY > 0){
                 playerY -= playerSpeed;
+                play = true;
             }
             else if(keyH.downPressed == true && playerY < screenHeight - 2 * originalTileSize){
                 playerY += playerSpeed;
+                play = true;
             }
             else if(keyH.leftPressed == true && playerX > 0){
                 playerX -= playerSpeed;
+                play = true;
             }
             else if(keyH.rightPressed == true && playerX < screenWidth - 2 * originalTileSize){
                 playerX += playerSpeed;
+                play = true;
             }
 
         }
@@ -126,78 +133,99 @@ public class FramePanel extends JPanel implements Runnable{
             player.fillRect(playerX,playerY, tileSize, tileSize);
 //            player.fill(new Rectangle2D.Float(playerX,playerY, tileSize, tileSize));
 
+                g.setColor(Color.green);
+                g.setFont(new Font("serif",Font.BOLD, 30));
+            g.drawString("Press (W, A, S or D) to Start", textLocation, textLocation* 2);
+
+                textLocation = screenHeight / 5;
+                if(play) {
+                    textLocation = 10000;
+                } else if(play = false){
+                    textLocation = screenHeight / 5;
+                }
 
             //
 
+            if(play) {
+
 //            // Red Ball
-//            Graphics2D redBall = (Graphics2D)g;
-//            redBall.setColor(Color.red);
-//
-//            // Adjust ball position
-//            redBallX += redBallDx;
-//            redBallY += redBallDy;
-//            redBall.fillOval(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
-//
-//
-//            // Boundary logic
-//            if (redBallX < radius) redBallDx = Math.abs(redBallDx);
-//            if (redBallX > getWidth() - radius) redBallDx = -Math.abs(redBallDx);
-//            if (redBallY < radius) redBallDy = Math.abs(redBallDy);
-//            if (redBallY > getHeight() - radius) redBallDy = -Math.abs(redBallDy);
-//            if(redBallX + radius == playerX + originalTileSize && redBallY + radius == playerY + originalTileSize) System.out.println("red kills u");
-//
-//            //
-//
-//            // Green Ball
-//            Graphics2D greenBall = (Graphics2D)g;
-//            greenBall.setColor(Color.green);
-//
-//            // Adjust ball position
-//            greenBallX += greenBallDx;
-//            greenBallY += greenBallDy;
-//            greenBall.fillOval(greenBallX - greenBallRadius, greenBallY - greenBallRadius, greenBallRadius * 2, greenBallRadius * 2);
-//
-//
-//            // Boundary logic
-//            if (greenBallX < greenBallRadius) greenBallDx = Math.abs(greenBallDx);
-//            if (greenBallX > getWidth() - greenBallRadius) greenBallDx = -Math.abs(greenBallDx);
-//            if (greenBallY < greenBallRadius) greenBallDy = Math.abs(greenBallDy);
-//            if (greenBallY > getHeight() - greenBallRadius) greenBallDy = -Math.abs(greenBallDy);
-//            if(greenBallX + greenBallRadius == playerX + originalTileSize && greenBallY + greenBallRadius == playerY + originalTileSize) System.out.println("green has koed ya");
+                Graphics2D redBall = (Graphics2D) g;
+                redBall.setColor(Color.red);
 
-            // Blue Ball
-            Graphics2D blueBall = (Graphics2D)g;
-            blueBall.setColor(Color.blue);
+                // Adjust ball position
+                redBallX += redBallDx;
+                redBallY += redBallDy;
+                redBall.fillOval(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
 
-            // Adjust ball position
-            blueBallX += blueBallDx;
-            blueBall.fillOval(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
 
+                // Boundary logic
+                if (redBallX < radius) redBallDx = Math.abs(redBallDx);
+                if (redBallX > getWidth() - radius) redBallDx = -Math.abs(redBallDx);
+                if (redBallY < radius) redBallDy = Math.abs(redBallDy);
+                if (redBallY > getHeight() - radius) redBallDy = -Math.abs(redBallDy);
+                if (redBallX + radius == playerX + originalTileSize && redBallY + radius == playerY + originalTileSize)
+                    System.out.println("red kills u");
+
+                //
+
+                // Green Ball
+                Graphics2D greenBall = (Graphics2D) g;
+                greenBall.setColor(Color.green);
+
+                // Adjust ball position
+                greenBallX += greenBallDx;
+                greenBallY += greenBallDy;
+                greenBall.fillOval(greenBallX - greenBallRadius, greenBallY - greenBallRadius, greenBallRadius * 2, greenBallRadius * 2);
+
+
+                // Boundary logic
+                if (greenBallX < greenBallRadius) greenBallDx = Math.abs(greenBallDx);
+                if (greenBallX > getWidth() - greenBallRadius) greenBallDx = -Math.abs(greenBallDx);
+                if (greenBallY < greenBallRadius) greenBallDy = Math.abs(greenBallDy);
+                if (greenBallY > getHeight() - greenBallRadius) greenBallDy = -Math.abs(greenBallDy);
+                if (greenBallX + greenBallRadius == playerX + originalTileSize && greenBallY + greenBallRadius == playerY + originalTileSize)
+                    System.out.println("green has koed ya");
+
+                // Blue Ball
+                Graphics2D blueBall = (Graphics2D) g;
+                blueBall.setColor(Color.blue);
+
+                // Adjust ball position
+                blueBallX += blueBallDx;
+                blueBall.fillOval(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
+                player.dispose();
+                redBall.dispose();
+                greenBall.dispose();
+                blueBall.dispose();
+            }
+            Rectangle greenBallRect = new Rectangle(greenBallX - greenBallRadius, greenBallY - greenBallRadius, greenBallRadius * 2, greenBallRadius * 2);
+            Rectangle redBallRect = new Rectangle(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
+            Rectangle blueBallRect = new Rectangle(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
+            Rectangle playerRect = new Rectangle(playerX,playerY, tileSize, tileSize);
 
             // Boundary logic
+            if(playerRect.intersects(redBallRect) || playerRect.intersects(greenBallRect) || playerRect.intersects(blueBallRect))
+            {
+                play = false;
+                System.out.println("collision");
+                g.setColor(Color.RED);
+                g.setFont(new Font("serif",Font.BOLD, 30));
+                g.drawString("Game Over, Scores: ", screenWidth/3,screenHeight/2 );
+
+                g.setColor(Color.RED);
+                g.setFont(new Font("serif",Font.BOLD, 20));
+                g.drawString("Press (Enter) to Restart", screenWidth/3,screenHeight/2+30);
+            }
+
             if (blueBallX < blueBallRadius) blueBallDx = Math.abs(blueBallDx);
             if (blueBallX > getWidth() - blueBallRadius) blueBallDx = -Math.abs(blueBallDx);
             if (blueBallY < blueBallRadius) blueBallDy = Math.abs(blueBallDy);
             if (blueBallY > getHeight() - blueBallRadius) blueBallDy = -Math.abs(blueBallDy);
             if(blueBallX + blueBallRadius == playerX + originalTileSize && playerY == blueBallY) System.out.println("blue ball has hit");
 
-//             if (isCollision){
-//              player.drawString("Collision", 350, 50); }
-
             player.dispose();
-//            redBall.dispose();
-//            greenBall.dispose();
-            blueBall.dispose();
-
 
         }
-
-//    public void collision(){
-//        Rectangle rectangle1 = player.bounds();
-//    }
-
-
-
     }
 
 
