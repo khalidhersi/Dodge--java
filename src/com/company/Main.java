@@ -9,7 +9,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("Paper Plane");
+        window.setTitle("Dodge");
 
         FramePanel framePanel = new FramePanel();
         window.add(framePanel);
