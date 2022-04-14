@@ -234,9 +234,10 @@ public class FramePanel extends JPanel implements Runnable{
             Rectangle redBallRect = new Rectangle(redBallX - radius, redBallY - radius, radius * 2, radius * 2);
             Rectangle blueBallRect = new Rectangle(blueBallX - blueBallRadius, blueBallY - blueBallRadius, blueBallRadius * 2, blueBallRadius * 2);
             Rectangle yellowBallRect = new Rectangle(yellowBallX - yellowBallRadius, yellowBallY - yellowBallRadius, yellowBallRadius * 8, yellowBallRadius * 2);
+            Rectangle yellowBallRect2 = new Rectangle(            (yellowBallX + 400) - yellowBallRadius, yellowBallY - yellowBallRadius, yellowBallRadius * 8, yellowBallRadius * 2);
 
             // Boundary logic
-            if(playerRect.intersects(redBallRect) || playerRect.intersects(greenBallRect) || playerRect.intersects(blueBallRect) || playerRect.intersects(yellowBallRect)) {
+            if(playerRect.intersects(redBallRect) || playerRect.intersects(greenBallRect) || playerRect.intersects(blueBallRect) || playerRect.intersects(yellowBallRect) || playerRect.intersects(yellowBallRect2)) {
                 collision = true;
             } else {
                 collision = false;
